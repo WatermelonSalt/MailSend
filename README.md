@@ -44,7 +44,7 @@ Please take a look at the provided example configuration file to understand bett
 
 ## How to use the script
 
-You can do `python MailSend.py -h` to get help regarding the program
+You can do `python MailSend.py -h` to get help regarding the program's options and arguments accepted by the options
 
 ## Things you should know
 
