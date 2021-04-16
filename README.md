@@ -14,7 +14,7 @@ The above mentioned module is only used for enabling colored output in the termi
 
 ## Requirements
 
-* A Python3 installation (This was checked with Python 3.9.4 and it works. Versions below this version have not been checked and it would be great if someone could help me with the compatibility checking)
+* A Python3 installation. Look at the python-package action for the particular commit in the Actions tab to know about version compatibility.
 * A dummy gmail account with **"less secure apps"** enabled
 
 ## Writing the configuration file
