@@ -1,0 +1,17 @@
+{
+    "Subject": "<Your mail subject>",
+    "From": "<Your mail id with less secure apps enabled>",
+    "Password" : "<Your mail id password>",
+    "To": "<Single receiver mail id>",
+    "CC": [
+		<Comma separated list of mail id strings>
+    ],
+    "Bcc": [
+		<Comma separated list of mail id strings>
+    ],
+    "TextContent" : "<path/to/the/file/containing/starting/text/with/extension>",
+    "HTMLContent" : "<path/to/the/file/containing/HTML/with/extension>",
+    "Attachments" : [
+        <Comma separated list of paths to files to be attached, total must not exceed 25 mb>
+    ]
+}
