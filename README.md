@@ -8,8 +8,8 @@ For MailSend to work properly [**"Less Secure Apps"**](https://myaccount.google.
 
 ## Dependencies
 
-MailSend has only one dependency which is **colorama** which can be installed using pip by executing the following command in the terminal
-`pip install colorama`
+MailSend has only one dependency which is **rich** which can be installed using pip by executing the following command in the terminal
+`pip install rich`
 The above mentioned module is only used for enabling colored output in the terminal and is not optional
 
 ## Requirements
