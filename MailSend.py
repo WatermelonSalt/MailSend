@@ -17,6 +17,10 @@ from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
 from rich.console import Console
 
+# Setting up the console dimensions
+
+os.system("mode con: cols=125 lines=30")
+
 # Initializing the console
 
 console = Console()
