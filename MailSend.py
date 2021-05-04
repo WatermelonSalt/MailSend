@@ -3,10 +3,8 @@
 
 import getopt
 import json
-from json import JSONDecodeError
 import os
 import smtplib
-from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 import ssl
 import sys
 from collections import Counter
@@ -14,12 +12,10 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from json import JSONDecodeError
+from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
-from colorama import Fore, init
-
-# Enable colored output
-
-init()
+from rich import print
 
 # Function to split the opts var into its options and arguments
 
@@ -120,7 +116,7 @@ def mailBuildParsing(optionlist, argumentlist):
         if option in ("-c", "--config"):
 
             print(
-                f"{Fore.GREEN}Found option {Fore.MAGENTA}{option}{Fore.GREEN} with argument {Fore.MAGENTA}{argumentlist[index]}"
+                f"[green]Found option[/green] [magenta]{option}[/magenta] [green]with argument[/green] [magenta]{argumentlist[index]}[/magenta]"
             )
 
             mailbuild = True
@@ -138,30 +134,30 @@ def mailBuildParsing(optionlist, argumentlist):
 
 def giveHelp():
 
-    helptext = f"""\
-{Fore.MAGENTA}MailSend Help
-{Fore.YELLOW}-------------
+    helptext = """\
+[magenta]MailSend Help[/magenta]
+[yellow]-------------[/yellow]
 
-{Fore.GREEN}Usage: MailSend [Options]
+[green]Usage: MailSend[/green] [cyan][Options][/cyan]
 
-{Fore.RED}Order of options does not matter
+[red]Order of options does not matter[/red]
 
-{Fore.GREEN}Options:
+[green]Options:[/green]
 
 
-{Fore.MAGENTA}Short        Long        Action
-{Fore.YELLOW}-----        ----        ------
+[magenta]Short        Long        Action[/magenta]
+[yellow]-----        ----        ------[/yellow]
 
-{Fore.CYAN}-c           --config    This option takes in a path to the config file which is used to send the emails
+[cyan]-c           --config    This option takes in a path to the config file which is used to send the emails[/cyan]
 
-{Fore.CYAN}-h           --help      This option shows this help message
+[cyan]-h           --help      This option shows this help message[/cyan]
 
-{Fore.MAGENTA}Arguments
-{Fore.YELLOW}---------
+[magenta]Arguments[/magenta]
+[yellow]---------[/yellow]
 
-{Fore.CYAN}-c <path/to/your/config.json>    {Fore.RED}Must include the extension
+[cyan]-c <path/to/your/config.json>[/cyan]    [red]Must include the extension[/red]
 
-{Fore.CYAN}-h {Fore.RED}No Arguments
+[cyan]-h[/cyan] [red]No Arguments[/red]
 """
 
     print(helptext)
@@ -172,7 +168,7 @@ def giveHelp():
 
 def handleOptions(argv):
 
-    print(f"{Fore.GREEN}Analysing the options provided to the program...")
+    print("[green]Analysing the options provided to the program...[/green]")
 
     try:
 
@@ -182,21 +178,21 @@ def handleOptions(argv):
 
     except Exception as exp:
 
-        print(f"{Fore.RED}{exp}\n\n{Fore.BLUE}The program will exit now")
+        print(f"[red]{exp}[/red]\n\n[blue]The program will exit now[/blue]")
         sys.exit()
 
     options, arguments = splitOptsVar(opts)
 
     if errs != []:
 
-        print(f"{Fore.RED}Options were not passed correctly!")
-        print(f"{Fore.GREEN}Please try again with proper options")
+        print("[red]Options were not passed correctly![/red]")
+        print("[green]Please try again with proper options[/green]")
         sys.exit()
 
     if opts == []:
 
         print(
-            f"{Fore.BLUE}Hmm, seems like you don't know how to use me\nWell, here is some help"
+            "[blue]Hmm, seems like you don't know how to use me\nWell, here is some help[/blue]"
         )
         giveHelp()
         sys.exit()
@@ -208,7 +204,7 @@ def handleOptions(argv):
     else:
 
         print(
-            f"{Fore.RED}You seem to use an option more than once which is not allowed.\nThe program will now exit"
+            "[red]You seem to use an option more than once which is not allowed.\nThe program will now exit[/red]"
         )
         sys.exit()
 
@@ -223,7 +219,7 @@ def handleOptions(argv):
     else:
 
         print(
-            f"{Fore.RED}You seem to use other options along with the 'help' option which should not be done.\nThe program will now exit"
+            "[red]You seem to use other options along with the 'help' option which should not be done.\nThe program will now exit[/red]"
         )
         sys.exit()
 
@@ -248,7 +244,7 @@ class MailBuild:
     def decodeConfig(self, configloc):
 
         print(
-            f"{Fore.GREEN}Trying to get the config file from {Fore.MAGENTA}{configloc}"
+            f"[green]Trying to get the config file from[/green] [magenta]{configloc}[/magenta]"
         )
 
         try:
@@ -260,12 +256,12 @@ class MailBuild:
         except FileNotFoundError:
 
             print(
-                f"{Fore.RED}Seems like I couldn't find the file specified..\nThe program will exit now"
+                "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
             )
             sys.exit()
 
-        print(f"{Fore.GREEN}Got the config file successfully, yay!")
-        print(f"{Fore.CYAN}Trying to load the config file into the program")
+        print("[green]Got the config file successfully, yay![/green]")
+        print("[cyan]Trying to load the config file into the program[/cyan]")
 
         try:
 
@@ -274,55 +270,55 @@ class MailBuild:
         except JSONDecodeError:
 
             print(
-                f"{Fore.RED}Seems like there is an error in your JSON encoding, please correct it and re-execute the program.\nThe program will exit now"
+                "[red]Seems like there is an error in your JSON encoding, please correct it and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
         print(
-            f"{Fore.GREEN}Loaded the config file successfully into the program, yay!"
+            "[green]Loaded the config file successfully into the program, yay![/green]"
         )
-        print(f"{Fore.GREEN}Trying to get the subject from the config file...")
+        print("[green]Trying to get the subject from the config file...[/green]")
 
         try:
 
             self.Subject = self.config["Subject"]
-            print(f"{Fore.GREEN}Got 'Subject' successfully, yay!")
+            print("[green]Got 'Subject' successfully, yay![/green]")
 
         except KeyError:
 
             print(
-                f"{Fore.RED}'Subject' key was not found, proceeding to next key.\n{Fore.CYAN}'Subject' will be automatically set as 'No Subject'"
+                "[red]'Subject' key was not found, proceeding to next key.[/red]\n[cyan]'Subject' will be automatically set as 'No Subject'[/cyan]"
             )
             self.Subject = "No Subject"
 
         try:
 
             self.From = self.config["From"]
-            print(f"{Fore.GREEN}Got 'From' successfully, yay!")
+            print("[green]Got 'From' successfully, yay![/green]")
 
             if "@gmail.com" not in self.From:
 
                 print(
-                    f"{Fore.RED}Aw, snap! Seems like it's not a Gmail address. I only support sending mails through gmail accounts.\nThe program will exit now"
+                    "[red]Aw, snap! Seems like it's not a Gmail address. I only support sending mails through gmail accounts.\nThe program will exit now[/red]"
                 )
                 sys.exit()
 
         except KeyError:
 
             print(
-                f"{Fore.RED}'From' key was not found, can't proceed to the next key.\nProgram will exit now"
+                "[red]'From' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
 
         try:
 
             self.Password = self.config["Password"]
-            print(f"{Fore.GREEN}Got 'Password' successfully, yay!")
+            print("[green]Got 'Password' successfully, yay![/green]")
 
         except KeyError:
 
             print(
-                f"{Fore.RED}'Password' key was not found, can't proceed to the next key.\nProgram will exit now"
+                "[red]'Password' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
 
@@ -333,7 +329,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'To' key was not found, can't proceed to the next key.\nProgram will exit now"
+                "[red]'To' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
 
@@ -344,7 +340,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'CC' key was not found, proceeding to next key.\n{Fore.CYAN}'CC' will automatically be assigned to an empty list"
+                "[red]'CC' key was not found, proceeding to next key.[/red]\n[cyan]'CC' will automatically be assigned to an empty list[/cyan]"
             )
 
             self.CC = []
@@ -356,7 +352,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'Bcc' key was not found, proceeding to next key.\n{Fore.CYAN}'Bcc' will automatically be assigned to an empty list"
+                "[red]'Bcc' key was not found, proceeding to next key.[/red]\n[cyan]'Bcc' will automatically be assigned to an empty list[/cyan]"
             )
 
             self.Bcc = []
@@ -368,7 +364,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'TextContent' key was not found, proceeding to next key.\n{Fore.CYAN}'TextContent' will automatically be assigned to an empty text file with the name 'Dummy.txt' but will be deleted after sending the mail"
+                "[red]'TextContent' key was not found, proceeding to next key.[/red]\n[cyan]'TextContent' will automatically be assigned to an empty text file with the name 'Dummy.txt' but will be deleted after sending the mail[/cyan]"
             )
 
             with open("Dummy.txt", "w+") as dummy:
@@ -384,7 +380,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'HTMLContent' key was not found, proceeding to next key.\n{Fore.CYAN}'HTMLContent' will automatically be assigned to an empty HTML file with the name 'Dummy.html' but will be deleted after sending the mail"
+                "[nred]'HTMLContent' key was not found, proceeding to next key.[/red]\n[cya]'HTMLContent' will automatically be assigned to an empty HTML file with the name 'Dummy.html' but will be deleted after sending the mail[/cyan]"
             )
 
             with open("Dummy.html", "w+") as dummy:
@@ -400,7 +396,7 @@ class MailBuild:
         except KeyError:
 
             print(
-                f"{Fore.RED}'Attachments' key was not found, proceeding to next key.\n{Fore.CYAN}'Attachments' will automatically be assigned to an empty list"
+                "[red]'Attachments' key was not found, proceeding to next key.[/red]\n[cyan]'Attachments' will automatically be assigned to an empty list[/cyan]"
             )
 
             self.Attachments = []
@@ -453,7 +449,7 @@ class MailBuild:
             except FileNotFoundError:
 
                 print(
-                    f"{Fore.RED}Seems like I couldn't find the file specified..\nThe program will exit now"
+                    "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
                 )
                 sys.exit()
 
@@ -474,7 +470,7 @@ class MailBuild:
         try:
 
             os.remove("Dummy.txt")
-            print(f"{Fore.YELLOW}Deleted temporarily created file 'Dummy.txt'")
+            print("[yellow]Deleted temporarily created file 'Dummy.txt'[/yellow]")
 
         except FileNotFoundError:
 
@@ -484,7 +480,7 @@ class MailBuild:
 
             os.remove("Dummy.html")
             print(
-                f"{Fore.YELLOW}Deleted temporarily created file 'Dummy.html'")
+                "[yellow]Deleted temporarily created file 'Dummy.html'[/yellow]")
 
         except FileNotFoundError:
 
@@ -513,7 +509,7 @@ if __name__ == "__main__":
     if mailbuild is True:
 
         print(
-            f"{Fore.YELLOW}Trying to build the mail from the data provided in the config file..."
+            "[yellow]Trying to build the mail from the data provided in the config file...[/yellow]"
         )
 
         builder = MailBuild()
@@ -521,8 +517,8 @@ if __name__ == "__main__":
         message, sender, password, receivers = builder.execute(
             MailBuildArgument)
 
-        print(f"{Fore.YELLOW}Mail built successfully, yay!")
-        print(f"{Fore.CYAN}Trying to send the built mail...")
+        print("[yellow]Mail built successfully, yay![/yellow]")
+        print("[cyan]Trying to send the built mail...[/cyan]")
 
         try:
 
@@ -531,17 +527,17 @@ if __name__ == "__main__":
         except SMTPAuthenticationError:
 
             print(
-                f"{Fore.RED}Oh, seems like the credentials were wrong, please check again and re-execute the program.\nThe program will exit now"
+                "[red]Oh, seems like the credentials were wrong, please check again and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
         except SMTPRecipientsRefused:
 
             print(
-                f"{Fore.RED}Oh, seems like the recepients' addresses were wrong, please check again and re-execute the program.\nThe program will exit now"
+                "[red]Oh, seems like the recepients' addresses were wrong, please check again and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
         print(
-            f"{Fore.GREEN}Seems like everything went as planned, sent mails successfully, yay!"
+            "[green]Seems like everything went as planned, sent mails successfully, yay![/green]"
         )
