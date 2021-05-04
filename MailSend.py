@@ -15,7 +15,11 @@ from email.mime.text import MIMEText
 from json import JSONDecodeError
 from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
-from rich import print
+from rich.console import Console
+
+# Initializing the console
+
+console = Console()
 
 # Function to split the opts var into its options and arguments
 
@@ -115,7 +119,7 @@ def mailBuildParsing(optionlist, argumentlist):
 
         if option in ("-c", "--config"):
 
-            print(
+            console.print(
                 f"[green]Found option[/green] [magenta]{option}[/magenta] [green]with argument[/green] [magenta]{argumentlist[index]}[/magenta]"
             )
 
@@ -160,7 +164,7 @@ def giveHelp():
 [cyan]-h[/cyan] [red]No Arguments[/red]
 """
 
-    print(helptext)
+    console.print(helptext)
 
 
 # Function to handle the options got from the getopt method
@@ -168,7 +172,8 @@ def giveHelp():
 
 def handleOptions(argv):
 
-    print("[green]Analysing the options provided to the program...[/green]")
+    console.print(
+        "[green]Analysing the options provided to the program...[/green]")
 
     try:
 
@@ -178,20 +183,21 @@ def handleOptions(argv):
 
     except Exception as exp:
 
-        print(f"[red]{exp}[/red]\n\n[blue]The program will exit now[/blue]")
+        console.print(
+            f"[red]{exp}[/red]\n\n[blue]The program will exit now[/blue]")
         sys.exit()
 
     options, arguments = splitOptsVar(opts)
 
     if errs != []:
 
-        print("[red]Options were not passed correctly![/red]")
-        print("[green]Please try again with proper options[/green]")
+        console.print("[red]Options were not passed correctly![/red]")
+        console.print("[green]Please try again with proper options[/green]")
         sys.exit()
 
     if opts == []:
 
-        print(
+        console.print(
             "[blue]Hmm, seems like you don't know how to use me\nWell, here is some help[/blue]"
         )
         giveHelp()
@@ -203,7 +209,7 @@ def handleOptions(argv):
 
     else:
 
-        print(
+        console.print(
             "[red]You seem to use an option more than once which is not allowed.\nThe program will now exit[/red]"
         )
         sys.exit()
@@ -218,7 +224,7 @@ def handleOptions(argv):
 
     else:
 
-        print(
+        console.print(
             "[red]You seem to use other options along with the 'help' option which should not be done.\nThe program will now exit[/red]"
         )
         sys.exit()
@@ -243,7 +249,7 @@ class MailBuild:
 
     def decodeConfig(self, configloc):
 
-        print(
+        console.print(
             f"[green]Trying to get the config file from[/green] [magenta]{configloc}[/magenta]"
         )
 
@@ -255,13 +261,14 @@ class MailBuild:
 
         except FileNotFoundError:
 
-            print(
+            console.print(
                 "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
             )
             sys.exit()
 
-        print("[green]Got the config file successfully, yay![/green]")
-        print("[cyan]Trying to load the config file into the program[/cyan]")
+        console.print("[green]Got the config file successfully, yay![/green]")
+        console.print(
+            "[cyan]Trying to load the config file into the program[/cyan]")
 
         try:
 
@@ -269,24 +276,25 @@ class MailBuild:
 
         except JSONDecodeError:
 
-            print(
+            console.print(
                 "[red]Seems like there is an error in your JSON encoding, please correct it and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
-        print(
+        console.print(
             "[green]Loaded the config file successfully into the program, yay![/green]"
         )
-        print("[green]Trying to get the subject from the config file...[/green]")
+        console.print(
+            "[green]Trying to get the subject from the config file...[/green]")
 
         try:
 
             self.Subject = self.config["Subject"]
-            print("[green]Got 'Subject' successfully, yay![/green]")
+            console.print("[green]Got 'Subject' successfully, yay![/green]")
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'Subject' key was not found, proceeding to next key.[/red]\n[cyan]'Subject' will be automatically set as 'No Subject'[/cyan]"
             )
             self.Subject = "No Subject"
@@ -294,18 +302,18 @@ class MailBuild:
         try:
 
             self.From = self.config["From"]
-            print("[green]Got 'From' successfully, yay![/green]")
+            console.print("[green]Got 'From' successfully, yay![/green]")
 
             if "@gmail.com" not in self.From:
 
-                print(
+                console.print(
                     "[red]Aw, snap! Seems like it's not a Gmail address. I only support sending mails through gmail accounts.\nThe program will exit now[/red]"
                 )
                 sys.exit()
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'From' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
@@ -313,11 +321,11 @@ class MailBuild:
         try:
 
             self.Password = self.config["Password"]
-            print("[green]Got 'Password' successfully, yay![/green]")
+            console.print("[green]Got 'Password' successfully, yay![/green]")
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'Password' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
@@ -328,7 +336,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'To' key was not found, can't proceed to the next key.\nProgram will exit now[/red]"
             )
             sys.exit()
@@ -339,7 +347,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'CC' key was not found, proceeding to next key.[/red]\n[cyan]'CC' will automatically be assigned to an empty list[/cyan]"
             )
 
@@ -351,7 +359,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'Bcc' key was not found, proceeding to next key.[/red]\n[cyan]'Bcc' will automatically be assigned to an empty list[/cyan]"
             )
 
@@ -363,7 +371,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'TextContent' key was not found, proceeding to next key.[/red]\n[cyan]'TextContent' will automatically be assigned to an empty text file with the name 'Dummy.txt' but will be deleted after sending the mail[/cyan]"
             )
 
@@ -379,7 +387,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[nred]'HTMLContent' key was not found, proceeding to next key.[/red]\n[cya]'HTMLContent' will automatically be assigned to an empty HTML file with the name 'Dummy.html' but will be deleted after sending the mail[/cyan]"
             )
 
@@ -395,7 +403,7 @@ class MailBuild:
 
         except KeyError:
 
-            print(
+            console.print(
                 "[red]'Attachments' key was not found, proceeding to next key.[/red]\n[cyan]'Attachments' will automatically be assigned to an empty list[/cyan]"
             )
 
@@ -448,7 +456,7 @@ class MailBuild:
 
             except FileNotFoundError:
 
-                print(
+                console.print(
                     "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
                 )
                 sys.exit()
@@ -470,7 +478,8 @@ class MailBuild:
         try:
 
             os.remove("Dummy.txt")
-            print("[yellow]Deleted temporarily created file 'Dummy.txt'[/yellow]")
+            console.print(
+                "[yellow]Deleted temporarily created file 'Dummy.txt'[/yellow]")
 
         except FileNotFoundError:
 
@@ -479,7 +488,7 @@ class MailBuild:
         try:
 
             os.remove("Dummy.html")
-            print(
+            console.print(
                 "[yellow]Deleted temporarily created file 'Dummy.html'[/yellow]")
 
         except FileNotFoundError:
@@ -508,7 +517,7 @@ if __name__ == "__main__":
 
     if mailbuild is True:
 
-        print(
+        console.print(
             "[yellow]Trying to build the mail from the data provided in the config file...[/yellow]"
         )
 
@@ -517,8 +526,8 @@ if __name__ == "__main__":
         message, sender, password, receivers = builder.execute(
             MailBuildArgument)
 
-        print("[yellow]Mail built successfully, yay![/yellow]")
-        print("[cyan]Trying to send the built mail...[/cyan]")
+        console.print("[yellow]Mail built successfully, yay![/yellow]")
+        console.print("[cyan]Trying to send the built mail...[/cyan]")
 
         try:
 
@@ -526,18 +535,18 @@ if __name__ == "__main__":
 
         except SMTPAuthenticationError:
 
-            print(
+            console.print(
                 "[red]Oh, seems like the credentials were wrong, please check again and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
         except SMTPRecipientsRefused:
 
-            print(
+            console.print(
                 "[red]Oh, seems like the recepients' addresses were wrong, please check again and re-execute the program.\nThe program will exit now[/red]"
             )
             sys.exit()
 
-        print(
+        console.print(
             "[green]Seems like everything went as planned, sent mails successfully, yay![/green]"
         )
