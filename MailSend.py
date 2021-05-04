@@ -20,14 +20,6 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress
 
-# Setting up the console dimensions
-
-os.system("mode con: cols=125 lines=30")
-
-# Initializing the console
-
-console = Console(color_system="auto")
-
 # Function to split the opts var into its options and arguments
 
 
@@ -448,7 +440,7 @@ class MailBuild:
 
         with Progress(transient=True) as progress:
 
-            task = progress.add_task("[cyan]Adding attachments...[/cyan]", total=len(self.Attachments), start=False)
+            task = progress.add_task("[cyan]Adding attachments...[/cyan]", total=len(self.Attachments))
 
             for attachment in self.Attachments:
 
@@ -469,10 +461,10 @@ class MailBuild:
                 except FileNotFoundError:
 
                     console.print(
-                        "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
+                        "\n[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
                     )
                     self.__del__()
-                    progress.__exit__()
+                    progress.__exit__(None, 1, None)
                     sys.exit()
 
     # Use the MailBuilder class through this method
@@ -492,8 +484,8 @@ class MailBuild:
         try:
 
             os.remove("Dummy.txt")
-            console.print(
-                "[yellow]Deleted temporarily created file 'Dummy.txt'[/yellow]")
+            print(
+                "Deleted temporarily created file 'Dummy.txt'")
 
         except FileNotFoundError:
 
@@ -502,8 +494,8 @@ class MailBuild:
         try:
 
             os.remove("Dummy.html")
-            console.print(
-                "[yellow]Deleted temporarily created file 'Dummy.html'[/yellow]")
+            print(
+                "Deleted temporarily created file 'Dummy.html'")
 
         except FileNotFoundError:
 
@@ -526,6 +518,10 @@ def mailSender(message, sender, password, receivers):
 
 # If the script is not used as a module, call MailBuild
 if __name__ == "__main__":
+
+    # Initializing the console
+
+    console = Console(color_system="auto")
 
     handleOptions(sys.argv)
 
