@@ -446,9 +446,9 @@ class MailBuild:
 
     def attachmentAdder(self):
 
-        with Progress() as progress:
+        with Progress(transient=True) as progress:
 
-            task = progress.add_task("[cyan]Adding attachments...[/cyan]", total=len(self.Attachments))
+            task = progress.add_task("[cyan]Adding attachments...[/cyan]", total=len(self.Attachments), start=False)
 
             for attachment in self.Attachments:
 
