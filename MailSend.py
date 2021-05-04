@@ -472,6 +472,7 @@ class MailBuild:
                         "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
                     )
                     self.__del__()
+                    progress.__exit__()
                     sys.exit()
 
     # Use the MailBuilder class through this method
