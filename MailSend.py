@@ -15,9 +15,10 @@ from email.mime.text import MIMEText
 from json import JSONDecodeError
 from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
+from rich import box
 from rich.console import Console
 from rich.panel import Panel
-from rich import box
+from rich.progress import Progress
 
 # Setting up the console dimensions
 
@@ -445,27 +446,33 @@ class MailBuild:
 
     def attachmentAdder(self):
 
-        for attachment in self.Attachments:
+        with Progress() as progress:
 
-            try:
+            task = progress.add_task("[cyan]Adding attachments...[/cyan]", total=len(self.Attachments))
 
-                with open(attachment, "rb") as attfile:
+            for attachment in self.Attachments:
 
-                    part = MIMEBase("application", "octet-stream")
-                    part.set_payload(attfile.read())
+                try:
 
-                encoders.encode_base64(part)
-                part.add_header(
-                    "Content-Disposition",
-                    f"attachment; filename = {os.path.basename(attachment)}")
-                self.message.attach(part)
+                    with open(attachment, "rb") as attfile:
 
-            except FileNotFoundError:
+                        part = MIMEBase("application", "octet-stream")
+                        part.set_payload(attfile.read())
 
-                console.print(
-                    "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
-                )
-                sys.exit()
+                    encoders.encode_base64(part)
+                    part.add_header(
+                        "Content-Disposition",
+                        f"attachment; filename = {os.path.basename(attachment)}")
+                    self.message.attach(part)
+                    progress.update(task, advance=1)
+
+                except FileNotFoundError:
+
+                    console.print(
+                        "[red]Seems like I couldn't find the file specified..\nThe program will exit now[/red]"
+                    )
+                    self.__del__()
+                    sys.exit()
 
     # Use the MailBuilder class through this method
 
