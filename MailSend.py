@@ -16,6 +16,8 @@ from json import JSONDecodeError
 from smtplib import SMTPAuthenticationError, SMTPRecipientsRefused
 
 from rich.console import Console
+from rich.panel import Panel
+from rich import box
 
 # Setting up the console dimensions
 
@@ -23,7 +25,7 @@ os.system("mode con: cols=125 lines=30")
 
 # Initializing the console
 
-console = Console()
+console = Console(color_system="auto")
 
 # Function to split the opts var into its options and arguments
 
@@ -165,10 +167,10 @@ def giveHelp():
 
 [cyan]-c <path/to/your/config.json>[/cyan]    [red]Must include the extension[/red]
 
-[cyan]-h[/cyan] [red]No Arguments[/red]
+[cyan]-h[/cyan]    [red]No Arguments[/red]
 """
 
-    console.print(helptext)
+    console.print(Panel.fit(helptext, box=box.DOUBLE), justify="center")
 
 
 # Function to handle the options got from the getopt method
