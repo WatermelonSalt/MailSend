@@ -52,12 +52,3 @@ You can do `python MailSend.py -h` to get help regarding the program's options a
 * Uses a GPL 3.0 License
 * An example config.json is also included which serves as a reference when writing your config.json
 * This script can also be bundled into an executable binary using [Pyinstaller](https://pypi.org/project/pyinstaller/)
-
-## Updates
-
-Updates will be made to this repo by me if time permits
-
-## Socials
-
-[![Discord](https://img.shields.io/badge/Discord-Visit-ff5500?labelColor=72269e&style=for-the-badge&logo=Discord&logoColor=#ffe600&logoWidth=20&link=https://discordapp.com/users/799197702281494601)](https://discordapp.com/users/799197702281494601)
-[![Spotify](https://img.shields.io/badge/Spotify-Listen-ff5500?labelColor=72269e&style=for-the-badge&logo=Spotify&logoWidth=20&link=https://open.spotify.com/playlist/4ngYgsMMKtMenzkyTczRHP)](https://open.spotify.com/playlist/4ngYgsMMKtMenzkyTczRHP)
