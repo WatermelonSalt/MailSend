@@ -1,5 +1,7 @@
 # MailSend - A Python script to send emails to multiple people via [gmail](smtp.gmail.com)
 
+This project was only meant for experimenting with the smtp protocol with gmail, and shouldn't be used actually for applications
+
 ## Introduction
 
 MailSend is a script written in Python which is capable of sending HTML formatted emails
